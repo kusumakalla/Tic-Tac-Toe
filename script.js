@@ -192,7 +192,7 @@ function ScreenController(){
         
     }
 
-    startGameButton.addEventListener("click", ()=> {
+    const startGame = () =>{
         gameOver= false;
         if (player1.value == "") 
             player1.value = "Player1";
@@ -203,7 +203,10 @@ function ScreenController(){
         player2.value = "";
         gameBoard = game.gameBoard;
         updateScreen();
-    });
+    }
+
+
+    startGameButton.addEventListener("click", startGame);
 
    
 
@@ -222,8 +225,15 @@ function ScreenController(){
                 winText.classList.add("winText");
                 winText.textContent = `${game.getActivePlayer().name} won`
                 container.appendChild(winText);
+                const resetButton = document.createElement("button");
+                resetButton.classList.add("resetButton");
+                resetButton.textContent = "Reset";
+                container.appendChild(resetButton);
                 player1.value = "";
                 player2.value = "";
+                resetButton.addEventListener("click", ()=>{
+                    container.textContent="";
+                });
                 gameOver= true;
             }
             else if(gameDone == -1){
@@ -233,6 +243,15 @@ function ScreenController(){
                 winText.classList.add("winText");
                 winText.textContent = "it's a tie";
                 container.appendChild(winText);
+                const resetButton = document.createElement("button");
+                resetButton.classList.add("resetButton");
+                resetButton.textContent = "Reset";
+                container.appendChild(resetButton);
+                player1.value = "";
+                player2.value = "";
+                resetButton.addEventListener("click", ()=> {
+                    container.textContent="";
+                });
                 gameOver=true;
             }
             else{
