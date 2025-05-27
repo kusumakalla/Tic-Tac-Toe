@@ -70,6 +70,7 @@ function GameController(playerOneName = 'Player1', playerTwoName = 'Player2'){
         }
     ]
 
+ 
     let activePlayer = player[0];
 
     const changePlayer = () => {
@@ -88,18 +89,28 @@ function GameController(playerOneName = 'Player1', playerTwoName = 'Player2'){
     const checkWin = (b) =>{
         for(let i=0;i<3;i++){
             if((b[i][0].getValue() == b[i][1].getValue() && b[i][1].getValue() == b[i][2].getValue()  && b[i][1].getValue() != "")){
-                return true;
+                return 1;
             }
             else if((b[0][i].getValue() == b[1][i].getValue() && b[1][i].getValue() == b[2][i].getValue()  && b[1][i].getValue() != "")){
-                return true;
+                return 1;
             }
         }
         if (b[0][0].getValue() == b[1][1].getValue() && b[1][1].getValue() == b[2][2].getValue() && b[0][0].getValue() != ""){
-            return true;
+            return 1;
         }
         else if(b[2][0].getValue() == b[1][1].getValue() && b[1][1].getValue() == b[0][2].getValue() && b[2][0].getValue() != ""){   
-            return true;
+            return 1;
         }
+        for(let i=0;i<3;i++){
+            for(let j=0;j<3;j++){
+                if(b[i][j].getValue() == ""){
+                    return 0;
+                }
+            }
+        }
+        
+
+        return -1;
     }
 
     const playRound = (row, column) =>{
@@ -107,19 +118,30 @@ function GameController(playerOneName = 'Player1', playerTwoName = 'Player2'){
         gameBoard.insertValue(getActivePlayer(), row, column);
 
         const win = checkWin(b);
-        if(win){
+        if(win == 1){
             console.log(`${getActivePlayer().name} wins` )
             for(let i=0;i<3;i++){
                 for(let j=0;j<3;j++){
                     b[i][j].putValue("");
                 }
             }
-            return
+            return 1;
 
+            
+        }
+        else if(win == -1){
+            console.log(`its a draw` )
+            for(let i=0;i<3;i++){
+                for(let j=0;j<3;j++){
+                    b[i][j].putValue("");
+                }
+            }
+            return -1;
         }
         else{
         changePlayer();
         printNewRound();
+        return 0
     }
         
     }
@@ -129,21 +151,31 @@ function GameController(playerOneName = 'Player1', playerTwoName = 'Player2'){
 
 
 function ScreenController(){
-    const game = GameController();
-    const gameBoard = game.gameBoard;
+    const player1 = document.querySelector(".player1");
+    const player2 = document.querySelector(".player2");
     
-    
-    const boardDiv = document.querySelector(".board");
-    const playerTurn = document.querySelector(".playerTurn");
+    const startGameButton = document.querySelector(".startGameButton");
+    const container = document.querySelector(".container");
+    let game = null;
+    let gameBoard = null;
+    let gameOver = false;
+
 
     const updateScreen = ()=>{
-        
-        boardDiv.textContent ="";
+        console.log(player1.value);
+        container.textContent ="";
         
         const board = gameBoard.getBoard();
         const activePlayer = game.getActivePlayer().name;
 
-        playerTurn.innerHTML = `${activePlayer}'s turn`;
+        const playerTurn = document.createElement("h2");
+        playerTurn.classList.add("playerTurn");
+        
+        playerTurn.textContent = `${activePlayer}'s turn`;
+        container.appendChild(playerTurn);
+
+        const boardDiv = document.createElement("div");
+        boardDiv.classList.add("boardDiv");
 
         board.forEach((row,i) => row.forEach((cell,index)=> {
             const button = document.createElement("button");
@@ -155,27 +187,60 @@ function ScreenController(){
             boardDiv.appendChild(button);
         }))
 
+        container.appendChild(boardDiv);
 
         
     }
-    updateScreen();
 
-    
+    startGameButton.addEventListener("click", ()=> {
+        gameOver= false;
+        if (player1 == "") 
+            player1 = "Player1";
+        if (player2 == "") 
+            player1 = "Player2";
+        game = GameController(player1.value, player2.value);
+        gameBoard = game.gameBoard;
+        updateScreen();
+    });
+
+   
 
     const handleClick = (e) =>{
-        const row = e.target.dataset.row;
-        const column =e.target.dataset.column;
+        if(gameOver) return;
+        const row = parseInt(e.target.dataset.row);
+        const column =parseInt(e.target.dataset.column);
         console.log(row, column);
-        if(!row )
+        if(isNaN(row) || isNaN(column))
             return
         else{
-            game.playRound(row, column)
+            const gameDone = game.playRound(row, column);
+            if(gameDone == 1){
+                container.textContent="";
+                const winText = document.createElement("p");
+                winText.classList.add("winText");
+                winText.textContent = `${game.getActivePlayer().name} wins`
+                container.appendChild(winText);
+                player1.value = "";
+                player2.value = "";
+                gameOver= true;
+            }
+            else if(gameDone == -1){
+                console.log(gameDone);
+                container.textContent="";
+                const winText = document.createElement("p");
+                winText.classList.add("winText");
+                winText.textContent = "it's a tie";
+                container.appendChild(winText);
+                gameOver=true;
+            }
+            else{
             updateScreen();
+            }
         }
 
     }
 
-    boardDiv.addEventListener("click", handleClick);
+    container.addEventListener("click", handleClick);
 
 
 
