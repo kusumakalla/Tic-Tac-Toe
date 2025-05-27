@@ -1,11 +1,95 @@
-button{
-    border:1px solid black;
-    width: 50px;
-    height: 50px;
+body{
+    background-color: rgba(234, 236, 237, 0.955);
+}
+
+header{
+    background-color: rgba(31, 103, 192, 0.522);
+    text-align: center;
+    color:whitesmoke;
+    border-radius: 5px;
+}
+
+.playerDetails{
+    text-align: center;
+}
+
+.startGameButton{
+    background-color: rgba(31, 103, 192, 0.422);
+    color: whitesmoke;
+    border: 1px solid whitesmoke;
+    border-radius: 5px;
+    padding: 5px;
+    font-weight: 600;
+}
+
+.startGameButton:hover{
+    background-color: rgba(20, 88, 171, 0.93);
+}
+
+.container {
+    text-align: center;
+}
+
+.boardButton{
+    background-color: rgba(31, 103, 192, 0.422);
+    border:1px solid whitesmoke;
+    width: 100px;
+    height: 80px;
+    color: whitesmoke;
+    font-size: 30px;
+}
+
+.boardButton:hover{
+     background-color: rgba(20, 88, 171, 0.93);
+}
+
+.boardButton:nth-child(-n+3){
+    border-top: none;
+}
+
+.boardButton:nth-child(3n-2){
+    border-left: none;
+}
+
+.boardButton:nth-child(3n){
+    border-right: none;
+}
+
+.boardButton:nth-child(n+7){
+    border-bottom: none;
 }
 
 .boardDiv {
+    width: 300px;
+    height: auto;
+    margin: auto;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
+    grid-template-columns: repeat(3,100px);
+}
+
+input {
+    background-color: rgba(31, 103, 192, 0.422);
+    color: whitesmoke;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+input:focus {
+    outline: none;
+    border: 1px solid rgba(2, 9, 19, 0.832);
+}
+
+.playerDetails h4{
+    color: rgba(3, 12, 23, 0.684);
+}
+
+.winText{
+    width: 300px;
+    height: auto;
+    margin: auto;
+    font-size: 50px;
+    background-color: rgba(9, 65, 133, 0.5);
+    color: whitesmoke;
+
 }

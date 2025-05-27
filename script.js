@@ -194,11 +194,13 @@ function ScreenController(){
 
     startGameButton.addEventListener("click", ()=> {
         gameOver= false;
-        if (player1 == "") 
-            player1 = "Player1";
-        if (player2 == "") 
-            player1 = "Player2";
+        if (player1.value == "") 
+            player1.value = "Player1";
+        if (player2.value == "") 
+            player2.value = "Player2";
         game = GameController(player1.value, player2.value);
+        player1.value = "";
+        player2.value = "";
         gameBoard = game.gameBoard;
         updateScreen();
     });
@@ -218,7 +220,7 @@ function ScreenController(){
                 container.textContent="";
                 const winText = document.createElement("p");
                 winText.classList.add("winText");
-                winText.textContent = `${game.getActivePlayer().name} wins`
+                winText.textContent = `${game.getActivePlayer().name} won`
                 container.appendChild(winText);
                 player1.value = "";
                 player2.value = "";
